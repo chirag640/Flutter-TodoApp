@@ -62,6 +62,7 @@ lib/
 ## Usage
 
 #### User Authentication
+
 - Register a new user.
 - Login with the registered user credentials.
 - The app will remember the last logged-in user and automatically log them in when the app is reopened.
