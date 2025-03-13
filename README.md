@@ -25,7 +25,7 @@ A simple and elegant Todo App built with Flutter. This app allows users to manag
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/yourusername/flutter_todo_app.git
+   git clone https://github.com/chirag640/flutter_todo_app.git
    cd flutter_todo_app
    ```
 
