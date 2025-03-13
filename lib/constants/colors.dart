@@ -5,6 +5,7 @@ const Color tdBlack = Color(0xFF3A3A3A);
 const Color tdBlue = Color(0xFF5F52EE);
 const Color tdGrey = Color(0xFF717171);
 const Color tdBgColor = Color(0xFFEEEFF5);
+const Color tdWhite = Color(0xFFFFFFFF);
 
 // Dark theme colors
 const Color tdDarkBgColor = Color(0xFF121212);

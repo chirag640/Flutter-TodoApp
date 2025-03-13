@@ -1,19 +1,22 @@
 class Todo {
-  String? id;
+  String id;
   String? title;
   bool? isCompleted;
+  String? userId;
 
   Todo({
     required this.id,
-    required this.title,
+    this.title,
     this.isCompleted = false,
+    this.userId,
   });
 
- Map<String, dynamic> toMap() {
+  Map<String, dynamic> toMap() {
     return {
       'id': id,
       'title': title,
       'isCompleted': isCompleted! ? 1 : 0,
+      'userId': userId,
     };
   }
 

@@ -32,7 +32,7 @@ class ThemeProvider extends ChangeNotifier {
       ),
       scaffoldBackgroundColor: tdBgColor,
       appBarTheme: AppBarTheme(
-        backgroundColor: Colors.white,
+        backgroundColor: tdBgColor,
         iconTheme: IconThemeData(color: tdBlack),
       ),
       textTheme: TextTheme(

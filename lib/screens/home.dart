@@ -4,10 +4,13 @@ import 'package:todo_app/database/database_helper.dart';
 import 'package:todo_app/model/todo.dart';
 import 'package:todo_app/widgets/todo_items.dart';
 import 'package:todo_app/screens/settings.dart';
-import 'package:todo_app/screens/profile.dart';
+import 'package:todo_app/screens/login.dart';
 
 class Home extends StatefulWidget {
-  const Home({super.key});
+  final String userId;
+  final String username;
+
+  const Home({super.key, required this.userId, required this.username});
 
   @override
   State<Home> createState() => _HomeState();
@@ -24,7 +27,7 @@ class _HomeState extends State<Home> {
   }
 
   Future<void> _loadTodos() async {
-    final todos = await DatabaseHelper().getTodos();
+    final todos = await DatabaseHelper().getTodos(widget.userId);
     setState(() {
       _foundTodo = todos;
     });
@@ -36,26 +39,36 @@ class _HomeState extends State<Home> {
     super.dispose();
   }
 
+  void _logout() async {
+    await DatabaseHelper().clearLastLoggedInUser();
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(builder: (context) => Login()),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Scaffold(
-      backgroundColor: theme.colorScheme.surface,
-      appBar: _buildAppBar(),
-      body: Stack(
-        children: [
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-            child: Column(
-              children: [
-                SearchBox(),
-                ListViews(),
-              ],
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        backgroundColor: theme.colorScheme.background,
+        appBar: _buildAppBar(),
+        body: Stack(
+          children: [
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+              child: Column(
+                children: [
+                  SearchBox(),
+                  ListViews(),
+                ],
+              ),
             ),
-          ),
-          bottomInput()
-        ],
+            bottomInput()
+          ],
+        ),
       ),
     );
   }
@@ -147,6 +160,7 @@ class _HomeState extends State<Home> {
     final newTodo = Todo(
       id: DateTime.now().millisecondsSinceEpoch.toString(),
       title: title,
+      userId: widget.userId,
     );
     await DatabaseHelper().insertTodo(newTodo);
     _todoController.clear();
@@ -197,28 +211,31 @@ class _HomeState extends State<Home> {
 
   AppBar _buildAppBar() {
     return AppBar(
+      automaticallyImplyLeading: false, // Remove the back arrow
       title: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
+          Text('Welcome, ${widget.username}'),
+          const SizedBox(width: 10),
           PopupMenuButton<String>(
             onSelected: (String result) {
               switch (result) {
-                case 'Profile':
-                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => Profile()));
-                  break;
                 case 'Settings':
                   Navigator.of(context).push(MaterialPageRoute(builder: (context) => Settings()));
+                  break;
+                case 'Logout':
+                  _logout();
                   break;
               }
             },
             itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
               const PopupMenuItem<String>(
-                value: 'Profile',
-                child: Text('Profile'),
-              ),
-              const PopupMenuItem<String>(
                 value: 'Settings',
                 child: Text('Settings'),
+              ),
+              const PopupMenuItem<String>(
+                value: 'Logout',
+                child: Text('Logout'),
               ),
             ],
             child: CircleAvatar(

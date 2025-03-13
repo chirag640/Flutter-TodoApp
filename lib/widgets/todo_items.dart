@@ -19,15 +19,7 @@ class TodoItems extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-                color: theme.scaffoldBackgroundColor,
-                boxShadow: const [
-                  BoxShadow(
-                    color: Colors.grey,
-                    blurRadius: 10,
-                    spreadRadius: 0.5,
-                    offset: Offset(0.7, 0.7),
-                  ),
-                ],
+                color: theme.appBarTheme.backgroundColor,
                 borderRadius: BorderRadius.circular(10),
               ),
       margin: const EdgeInsets.only(bottom: 20),
@@ -66,7 +58,7 @@ class TodoItems extends StatelessWidget {
             icon: const Icon(Icons.delete),
             iconSize: 18,
             onPressed: () {
-              onTodoDelete(todo.id!);
+              onTodoDelete(todo.id);
             },
           ),
         ),

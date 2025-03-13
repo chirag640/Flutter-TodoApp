@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:todo_app/screens/home.dart';
+import 'package:todo_app/screens/login.dart';
 import 'package:todo_app/provider/theme_provider.dart';
 
 void main() {
@@ -24,7 +24,7 @@ class MainApp extends StatelessWidget {
           themeMode: themeProvider.themeMode,
           theme: themeProvider.lightTheme,
           darkTheme: themeProvider.darkTheme,
-          home: Home(),
+          home: Login(),
         );
       },
     );
