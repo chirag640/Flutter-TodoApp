@@ -3,6 +3,8 @@ import 'package:todo_app/constants/colors.dart';
 import 'package:todo_app/database/database_helper.dart';
 import 'package:todo_app/model/todo.dart';
 import 'package:todo_app/widgets/todo_items.dart';
+import 'package:todo_app/screens/settings.dart';
+import 'package:todo_app/screens/profile.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -36,8 +38,10 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
-      backgroundColor: tdBgColor,
+      backgroundColor: theme.colorScheme.surface,
       appBar: _buildAppBar(),
       body: Stack(
         children: [
@@ -57,6 +61,8 @@ class _HomeState extends State<Home> {
   }
 
   Align bottomInput() {
+    final theme = Theme.of(context);
+
     return Align(
       alignment: Alignment.bottomCenter,
       child: Row(
@@ -66,7 +72,7 @@ class _HomeState extends State<Home> {
               margin: const EdgeInsets.only(bottom: 20, right: 20, left: 20),
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: theme.scaffoldBackgroundColor,
                 boxShadow: const [
                   BoxShadow(
                     color: Colors.grey,
@@ -101,6 +107,8 @@ class _HomeState extends State<Home> {
   }
 
   Expanded ListViews() {
+    final theme = Theme.of(context);
+
     return Expanded(
       child: ListView(
         children: [
@@ -108,10 +116,7 @@ class _HomeState extends State<Home> {
             margin: const EdgeInsets.only(top: 50, bottom: 20),
             child: Text(
               "All Todos",
-              style: TextStyle(
-                fontSize: 30,
-                fontWeight: FontWeight.w500,
-              ),
+              style: theme.textTheme.headlineMedium,
             ),
           ),
           for (Todo todo in _foundTodo)
@@ -149,10 +154,12 @@ class _HomeState extends State<Home> {
   }
 
   Widget SearchBox() {
+    final theme = Theme.of(context);
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: theme.appBarTheme.backgroundColor,
         borderRadius: BorderRadius.circular(20),
       ),
       child: TextField(
@@ -190,7 +197,6 @@ class _HomeState extends State<Home> {
 
   AppBar _buildAppBar() {
     return AppBar(
-      backgroundColor: tdBgColor,
       title: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
@@ -198,10 +204,10 @@ class _HomeState extends State<Home> {
             onSelected: (String result) {
               switch (result) {
                 case 'Profile':
-                  // Handle Profile action
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => Profile()));
                   break;
                 case 'Settings':
-                  // Handle Settings action
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => Settings()));
                   break;
               }
             },
