@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todo_app/constants/colors.dart';
+import 'package:todo_app/database/database_helper.dart';
 import 'package:todo_app/model/todo.dart';
 import 'package:todo_app/widgets/todo_items.dart';
 
@@ -11,20 +12,26 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  final todoList = Todo.todos;
-  List<Todo> _foundTodo = [];
   final TextEditingController _todoController = TextEditingController();
+  List<Todo> _foundTodo = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadTodos();
+  }
+
+  Future<void> _loadTodos() async {
+    final todos = await DatabaseHelper().getTodos();
+    setState(() {
+      _foundTodo = todos;
+    });
+  }
 
   @override
   void dispose() {
     _todoController.dispose();
     super.dispose();
-  }
-
-  @override
-  void initState() {
-     _foundTodo = todoList;
-    super.initState();
   }
 
   @override
@@ -107,7 +114,7 @@ class _HomeState extends State<Home> {
               ),
             ),
           ),
-          for (Todo todo in _foundTodo.reversed)
+          for (Todo todo in _foundTodo)
             TodoItems(
               todo: todo,
               onTodoChange: _handleTodoChange,
@@ -118,45 +125,27 @@ class _HomeState extends State<Home> {
     );
   }
 
-  void _runFilter(String enteredKeyword) {
-    List<Todo> results = [];
-    if (enteredKeyword.isEmpty) {
-      results = todoList;
-    } else {
-      results = todoList
-          .where((todo) => todo.title!
-              .toLowerCase()
-              .contains(enteredKeyword.toLowerCase()))
-          .toList();
-    }
+  void _handleTodoChange(Todo todo) async {
     setState(() {
-      _foundTodo = results;
+      todo.isCompleted = !todo.isCompleted!;
     });
+    await DatabaseHelper().updateTodo(todo);
   }
 
-  void _handleTodoChange(Todo todo) {
-    setState(() {
-      if (todo.isCompleted != null) {
-        todo.isCompleted = !todo.isCompleted!;
-      }
-    });
+  void _handleTodoDelete(String id) async {
+    await DatabaseHelper().deleteTodo(id);
+    _loadTodos();
   }
 
-  void _handleTodoDelete(String id) {
-    setState(() {
-      todoList.removeWhere((todo) => todo.id == id);
-    });
-  }
-
-  void _handleTodoAdd(String todo) {
-    if (todo.isEmpty) return;
-    setState(() {
-      todoList.add(Todo(
-        id: DateTime.now().millisecondsSinceEpoch.toString(),
-        title: todo,
-      ));
-    });
+  void _handleTodoAdd(String title) async {
+    if (title.isEmpty) return;
+    final newTodo = Todo(
+      id: DateTime.now().millisecondsSinceEpoch.toString(),
+      title: title,
+    );
+    await DatabaseHelper().insertTodo(newTodo);
     _todoController.clear();
+    _loadTodos();
   }
 
   Widget SearchBox() {
@@ -183,15 +172,52 @@ class _HomeState extends State<Home> {
     );
   }
 
+  void _runFilter(String enteredKeyword) {
+    List<Todo> results = [];
+    if (enteredKeyword.isEmpty) {
+      results = _foundTodo;
+    } else {
+      results = _foundTodo
+          .where((todo) => todo.title!
+              .toLowerCase()
+              .contains(enteredKeyword.toLowerCase()))
+          .toList();
+    }
+    setState(() {
+      _foundTodo = results;
+    });
+  }
+
   AppBar _buildAppBar() {
     return AppBar(
       backgroundColor: tdBgColor,
       title: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          Icon(Icons.menu, color: tdBlack),
-          CircleAvatar(
-            child: Icon(Icons.person),
+          PopupMenuButton<String>(
+            onSelected: (String result) {
+              switch (result) {
+                case 'Profile':
+                  // Handle Profile action
+                  break;
+                case 'Settings':
+                  // Handle Settings action
+                  break;
+              }
+            },
+            itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+              const PopupMenuItem<String>(
+                value: 'Profile',
+                child: Text('Profile'),
+              ),
+              const PopupMenuItem<String>(
+                value: 'Settings',
+                child: Text('Settings'),
+              ),
+            ],
+            child: CircleAvatar(
+              child: Icon(Icons.person),
+            ),
           ),
         ],
       ),

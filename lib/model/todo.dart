@@ -9,27 +9,13 @@ class Todo {
     this.isCompleted = false,
   });
 
-  static List<Todo> todos = [
-    Todo(
-      id: '1',
-      title: 'Check Mail',
-      isCompleted: true,
-    ),
-    Todo(
-      id: '2',
-      title: 'Buy Groceries',
-    ),
-    Todo(
-      id: '3',
-      title: 'Pay Bills',
-    ),
-    Todo(
-      id: '4',
-      title: 'Call Mom',
-    ),
-    Todo(
-      id: '5',
-      title: 'Meeting with Team',
-    ),
-  ];
+ Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'title': title,
+      'isCompleted': isCompleted! ? 1 : 0,
+    };
+  }
+
+  static List<Todo> todos = [];
 }
