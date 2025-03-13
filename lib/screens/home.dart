@@ -12,12 +12,19 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   final todoList = Todo.todos;
+  List<Todo> _foundTodo = [];
   final TextEditingController _todoController = TextEditingController();
 
   @override
   void dispose() {
     _todoController.dispose();
     super.dispose();
+  }
+
+  @override
+  void initState() {
+     _foundTodo = todoList;
+    super.initState();
   }
 
   @override
@@ -100,7 +107,7 @@ class _HomeState extends State<Home> {
               ),
             ),
           ),
-          for (Todo todo in todoList)
+          for (Todo todo in _foundTodo)
             TodoItems(
               todo: todo,
               onTodoChange: _handleTodoChange,
@@ -109,6 +116,22 @@ class _HomeState extends State<Home> {
         ],
       ),
     );
+  }
+
+  void _runFilter(String enteredKeyword) {
+    List<Todo> results = [];
+    if (enteredKeyword.isEmpty) {
+      results = todoList;
+    } else {
+      results = todoList
+          .where((todo) => todo.title!
+              .toLowerCase()
+              .contains(enteredKeyword.toLowerCase()))
+          .toList();
+    }
+    setState(() {
+      _foundTodo = results;
+    });
   }
 
   void _handleTodoChange(Todo todo) {
@@ -144,6 +167,7 @@ class _HomeState extends State<Home> {
         borderRadius: BorderRadius.circular(20),
       ),
       child: TextField(
+        onChanged: (value) => _runFilter(value),
         decoration: InputDecoration(
           contentPadding: const EdgeInsets.all(0),
           hintText: 'Search',
