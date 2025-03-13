@@ -33,7 +33,7 @@ A simple and elegant Todo App built with Flutter. This app allows users to manag
     ```bash
     flutter pub get
     ```
-   3. Run the app:
+3. Run the app:
     ```bash
     flutter run
     ```
