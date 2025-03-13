@@ -1,12 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:todo_app/constants/colors.dart';
 
 class ThemeProvider extends ChangeNotifier {
   ThemeMode _themeMode = ThemeMode.light;
 
+ ThemeProvider() {
+    _loadTheme();
+  }
   ThemeMode get themeMode => _themeMode;
 
-  void toggleTheme(bool isDarkMode) {
+  void toggleTheme(bool isDarkMode) async {
+    _themeMode = isDarkMode ? ThemeMode.dark : ThemeMode.light;
+    notifyListeners();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool('isDarkMode', isDarkMode);
+  }
+  Future<void> _loadTheme() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool isDarkMode = prefs.getBool('isDarkMode') ?? false;
     _themeMode = isDarkMode ? ThemeMode.dark : ThemeMode.light;
     notifyListeners();
   }
@@ -20,7 +32,7 @@ class ThemeProvider extends ChangeNotifier {
       ),
       scaffoldBackgroundColor: tdBgColor,
       appBarTheme: AppBarTheme(
-        backgroundColor: tdBgColor,
+        backgroundColor: Colors.white,
         iconTheme: IconThemeData(color: tdBlack),
       ),
       textTheme: TextTheme(

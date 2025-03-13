@@ -13,14 +13,12 @@ class Settings extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Settings'),
       ),
-      body: Center(
-        child: SwitchListTile(
-          title: const Text('Dark Mode'),
-          value: themeProvider.themeMode == ThemeMode.dark,
-          onChanged: (value) {
-            themeProvider.toggleTheme(value);
-          },
-        ),
+      body: SwitchListTile(
+        title: const Text('Dark Mode'),
+        value: themeProvider.themeMode == ThemeMode.dark,
+        onChanged: (value) {
+          themeProvider.toggleTheme(value);
+        },
       ),
     );
   }
