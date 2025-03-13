@@ -30,16 +30,16 @@ A simple and elegant Todo App built with Flutter. This app allows users to manag
    ```
 
 2. Install dependencies:
-```bash
-   flutter pub get
-   ```
+    ```bash
+    flutter pub get
+    ```
    3. Run the app:
-```bash
-   flutter run
-   ```
+    ```bash
+    flutter run
+    ```
 
 ### Project Structure
-
+```bash
 lib/
 ├── constants/
 │   └── colors.dart
@@ -58,21 +58,21 @@ lib/
 ├── widgets/
 │   └── todo_items.dart
 └── main.dart
+```
+## Usage
 
-### Usage
-
-# User Authentication
+#### User Authentication
 - Register a new user.
 - Login with the registered user credentials.
 - The app will remember the last logged-in user and automatically log them in when the app is reopened.
-# Managing Todos
+#### Managing Todos
 - Add a new todo by entering the task in the input field and pressing the add button.
 - Update a todo by tapping on it to mark it as completed or not completed.
 - Delete a todo by pressing the delete button next to the task.
 - Search for todos using the search bar.
-# Theming
+#### Theming
 - Toggle between dark and light themes in the settings screen.
 
-## Contributing
+### Contributing
 - Contributions are welcome! Please open an issue or submit a
 pull request for any improvements or bug fixes.
